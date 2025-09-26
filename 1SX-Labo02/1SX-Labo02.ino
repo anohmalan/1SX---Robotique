@@ -127,9 +127,11 @@ void ralentiMode() {
 
   if (ultraSensor.distanceCm() > detectDist) {
     currentState = NORMAL;
-  } else if (ultraSensor.distanceCm() <= dangerDist) {
+  } 
+  else if (ultraSensor.distanceCm() <= dangerDist) {
     currentState = DANGER;
-  } else {
+  } 
+  else {
     currentState = RALENTI;
   }
 }
@@ -139,6 +141,7 @@ void dangerMode() {
   static int step = 0;
   int rateStop = 500;
   int rateRecul = 1000;
+  int rate = 2000;
 
   unsigned long currentTime = millis();
 
@@ -172,13 +175,13 @@ void dangerMode() {
 
       digitalWrite(m1_in2, HIGH);
       digitalWrite(m1_in1, LOW);
-      analogWrite(m1_pwm, maxPwm);  //Set speed via PWM
+      analogWrite(m1_pwm, maxPwm);  
 
       digitalWrite(m2_in2, LOW);
       digitalWrite(m2_in1, LOW);
-      analogWrite(m2_pwm, maxPwm);  //Set speed via PWM
+      analogWrite(m2_pwm, maxPwm);  
 
-      if (currentTime - previousTime >= 2000) {
+      if (currentTime - previousTime >= rate) {
         step = 3;
         previousTime = currentTime;
       }
