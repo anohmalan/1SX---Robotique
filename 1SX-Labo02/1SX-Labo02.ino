@@ -85,13 +85,9 @@ void stateManager() {
 }
 
 void normalMode() {
-  static unsigned long lastDebug = 0;
-  static long statePrevious = 0;
-  static long stateDelay = 10000;
-
-  currentTime = millis();
 
   if (ultraSensor.distanceCm() > detectDist) {
+
     currentState = NORMAL;
 
     digitalWrite(m1_in2, LOW);
@@ -101,12 +97,9 @@ void normalMode() {
     digitalWrite(m2_in2, LOW);
     digitalWrite(m2_in1, HIGH);
     analogWrite(m2_pwm, maxPwm);
+  }
 
-    if (currentTime - lastDebug >= stateDelay) {
-      lastDebug = currentTime;
-      currentState = RONDE;
-    }
-  } else if (ultraSensor.distanceCm() < detectDist && ultraSensor.distanceCm() > dangerDist) {
+  else if (ultraSensor.distanceCm() < detectDist && ultraSensor.distanceCm() > dangerDist) {
     currentState = RALENTI;
     return;
   } else {
@@ -127,11 +120,9 @@ void ralentiMode() {
 
   if (ultraSensor.distanceCm() > detectDist) {
     currentState = NORMAL;
-  } 
-  else if (ultraSensor.distanceCm() <= dangerDist) {
+  } else if (ultraSensor.distanceCm() <= dangerDist) {
     currentState = DANGER;
-  } 
-  else {
+  } else {
     currentState = RALENTI;
   }
 }
@@ -175,11 +166,11 @@ void dangerMode() {
 
       digitalWrite(m1_in2, HIGH);
       digitalWrite(m1_in1, LOW);
-      analogWrite(m1_pwm, maxPwm);  
+      analogWrite(m1_pwm, maxPwm);
 
       digitalWrite(m2_in2, LOW);
       digitalWrite(m2_in1, LOW);
-      analogWrite(m2_pwm, maxPwm);  
+      analogWrite(m2_pwm, maxPwm);
 
       if (currentTime - previousTime >= rate) {
         step = 3;
