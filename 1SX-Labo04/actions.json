@@ -1,0 +1,33 @@
+{
+  "header": [255, 85],
+  "directions": {
+    "w": "F",
+    "a": "L",
+    "s": "B",
+    "d": "R",
+    "e": "K",
+    "stop": "S"
+  },
+  "actions": [
+    {
+      "key": "1",
+      "data": "AUTO,30",
+      "label": "Mode auto"
+    },
+    {
+      "key": "2",
+      "data": "MAN,20",
+      "label": "Mode manuel"
+    },
+    {
+      "key": "g",
+      "data": "d",
+      "label": "DebugMode"
+    },
+    {
+      "key": "z",
+      "data": [255, 85],
+      "label": "Special Command"
+    }
+  ]
+}

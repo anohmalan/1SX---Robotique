@@ -276,98 +276,98 @@ void updateDistance(){
 
 void gererEtat(unsigned long currentTime) {
   blinkLoop();
-const int marge =15;
-  switch (currentState) {
-    case SETUP:
-      setupState(currentTime);
-      break;
-    case SEGMENT1:
-      updateDistance();
-      avanceState(speed);
-      updateProgressBar(distParcourue / DISTANCE_XX);
-      if (distParcourue >= DISTANCE_XX) {
-        clearLeds();
-        
-        startSpin(angle);
-        currentState = PIVOT;
-      }
-      break;
-
-    case PIVOT:
-      spinLoop(speed);
-      if (!spinning) {
-        distParcourue = 0;
-        gyro.resetData();
-        avanceState(speed, 1);
-        currentState = SEGMENT2;
-      }
-      break;
-
-    case SEGMENT2:
-      if (distanceCm > ARRET_YY) {
+  const int marge =15;
+    switch (currentState) {
+      case SETUP:
+        setupState(currentTime);
+        break;
+      case SEGMENT1:
         updateDistance();
         avanceState(speed);
-      } else {
+        updateProgressBar(distParcourue / DISTANCE_XX);
+        if (distParcourue >= DISTANCE_XX) {
+          clearLeds();
+          
+          startSpin(angle);
+          currentState = PIVOT;
+        }
+        break;
+
+      case PIVOT:
+        spinLoop(speed);
+        if (!spinning) {
+          distParcourue = 0;
+          gyro.resetData();
+          avanceState(speed, 1);
+          currentState = SEGMENT2;
+        }
+        break;
+
+      case SEGMENT2:
+        if (distanceCm > ARRET_YY) {
+          updateDistance();
+          avanceState(speed);
+        } else {
+          Stop();
+          segment2Distance = distParcourue;
+          currentState = LIVRAISON;
+          startBlink();
+        }
+        break;
+
+      case LIVRAISON:
+        if (!deliveryDone && !blinking) {
+          deliveryDone = true;
+          distParcourue = 0;
+          gyro.resetData();
+          avanceState(-speed, 1);
+          currentState = RETOUR_SEGMENT2;
+        }
+        break;
+
+      case RETOUR_SEGMENT2:
+        retourAnimation();
+        updateDistance();
+        avanceState(-speed);
+        if (distParcourue +marge >= segment2Distance) {
+          Stop();
+          distParcourue = 0;
+          startSpin(-angle);  
+          currentState = PIVOT_BONUS;
+        }
+        break;
+
+      case PIVOT_BONUS:
+        retourAnimation();
+        spinLoop(speed);
+        if (!spinning) {
+          distParcourue = 0;
+          gyro.resetData();
+          avanceState(-speed, 1);
+          currentState = RETOUR_SEGMENT1;
+        }
+        break;
+
+      case RETOUR_SEGMENT1:
+      int delay = 5000;
+        retourAnimation();
+        updateDistance();
+        avanceState(-speed);
+        if (distParcourue -marge >= DISTANCE_XX) {
+          Stop();
+          clearLeds();
+          for (int i = 0; i < LEDNUM; ++i) led.setColor(i, 255, 0, 0);
+          led.show();
+          unsigned long t = millis();
+          while (millis() - t < delay) { gyro.update(); encoderLoop(); } 
+          clearLeds();
+          currentState = TERMINE;
+        }
+        break;
+
+      case TERMINE:
         Stop();
-        segment2Distance = distParcourue;
-        currentState = LIVRAISON;
-        startBlink();
-      }
-      break;
-
-    case LIVRAISON:
-      if (!deliveryDone && !blinking) {
-        deliveryDone = true;
-        distParcourue = 0;
-        gyro.resetData();
-        avanceState(-speed, 1);
-        currentState = RETOUR_SEGMENT2;
-      }
-      break;
-
-    case RETOUR_SEGMENT2:
-      retourAnimation();
-      updateDistance();
-      avanceState(-speed);
-      if (distParcourue +marge >= segment2Distance) {
-        Stop();
-        distParcourue = 0;
-        startSpin(-angle);  
-        currentState = PIVOT_BONUS;
-      }
-      break;
-
-    case PIVOT_BONUS:
-      retourAnimation();
-      spinLoop(speed);
-      if (!spinning) {
-        distParcourue = 0;
-        gyro.resetData();
-        avanceState(-speed, 1);
-        currentState = RETOUR_SEGMENT1;
-      }
-      break;
-
-    case RETOUR_SEGMENT1:
-    int delay = 5000;
-      retourAnimation();
-      updateDistance();
-      avanceState(-speed);
-      if (distParcourue -marge >= DISTANCE_XX) {
-        Stop();
-        clearLeds();
-        for (int i = 0; i < LEDNUM; ++i) led.setColor(i, 255, 0, 0);
-        led.show();
-        unsigned long t = millis();
-        while (millis() - t < delay) { gyro.update(); encoderLoop(); } 
-        clearLeds();
-        currentState = TERMINE;
-      }
-      break;
-
-    case TERMINE:
-      Stop();
-      break;
+        break;
   }
 }
 
