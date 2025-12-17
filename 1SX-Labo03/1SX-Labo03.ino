@@ -371,7 +371,6 @@ void gererEtat(unsigned long currentTime) {
   }
 }
 
-
 void loop() {
   unsigned long currentTime = millis();
   gyro.update();
