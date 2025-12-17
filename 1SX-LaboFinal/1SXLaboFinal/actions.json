@@ -1,0 +1,48 @@
+{
+  "header": [255, 85],
+  "directions": {
+    "w": "F",
+    "a": "L",
+    "s": "B",
+    "d": "R",
+    "e": "K",
+    "stop": "S"
+  },
+  "actions": [
+    {
+      "key": "0",
+      "data": "GO,30",
+      "label": "GO"
+    },
+    {
+      "key": "1",
+      "data": "AUTO,30",
+      "label": "Mode auto"
+    },
+    {
+      "key": "2",
+      "data": "MAN,20",
+      "label": "Mode manuel"
+    },
+    {
+      "key": "3",
+      "data": "STOP,20",
+      "label": "STOP"
+    },
+    {
+      "key": "4",
+      "data": "H",
+      "label": "CHECKPOINTF"
+    },
+    {
+      "key": "k",
+      "data": "C",
+      "label": "Calibration"
+    },
+    {
+      "key": "z",
+      "data": [255, 85],
+      "label": "Special Command"
+    }
+  ]
+}
